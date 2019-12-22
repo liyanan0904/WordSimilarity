@@ -10,7 +10,6 @@ log = logging.getLogger("WordSimilarity")
 
 class SimilarBase(object):
     def __init__(self):
-
         self._data = {}  # key为词，value为list,五层编码，
         self._code_tree = {}    # 五层编码树，key为每层的名称。value为[dict],
 
@@ -37,54 +36,55 @@ class SimilarBase(object):
         加载词林数据。
         :return:
         '''
+        
 
-        file_obj = open(file_path, 'r', encoding='UTF-8')
-        line_num = 0
-        while True:
-            line_num += 1
-            line = file_obj.readline()
+        #file_obj = open(file_path, 'r', encoding='UTF-8')
+        #line_num = 0
+        #while True:
+        #    line_num += 1
+        #    line = file_obj.readline()
 
-            try:
-                if line:
-                    line = line.strip()
-                    parts = line.split(" ")
+        #    try:
+        #        if line:
+        #            line = line.strip()
+        #            parts = line.split(" ")
 
-                    word_code = parts[0]
+        #            word_code = parts[0]
 
-                    layer_codes = self._parse_code(word_code)
+        #            layer_codes = self._parse_code(word_code)
 
-                    last_tree_node = self._code_tree
-                    # 构建编码树
-                    for lay_idx,lay_char in enumerate(layer_codes):
+        #            last_tree_node = self._code_tree
+        #            # 构建编码树
+        #            for lay_idx,lay_char in enumerate(layer_codes):
 
-                        t_cur_node_name = lay_char
+        #                t_cur_node_name = lay_char
 
-                        if t_cur_node_name in last_tree_node:
-                            last_tree_node = last_tree_node[t_cur_node_name]
-                        else:
-                            t_cur_node = {}
+        #                if t_cur_node_name in last_tree_node:
+        #                    last_tree_node = last_tree_node[t_cur_node_name]
+        #                else:
+        #                    t_cur_node = {}
 
-                            # 如果是后一个分类标识项，则将词的个数写到树叶上。
-                            if lay_idx == len(layer_codes) - 1:
-                                t_cur_node = len(parts)-1
+        #                    # 如果是后一个分类标识项，则将词的个数写到树叶上。
+        #                    if lay_idx == len(layer_codes) - 1:
+        #                        t_cur_node = len(parts)-1
 
-                            last_tree_node[t_cur_node_name] = t_cur_node
-                            last_tree_node = last_tree_node[t_cur_node_name]
+        #                    last_tree_node[t_cur_node_name] = t_cur_node
+        #                    last_tree_node = last_tree_node[t_cur_node_name]
 
-                    # 构建词到编码的映射。
-                    for t_word in parts[1:]:
+        #            # 构建词到编码的映射。
+        #            for t_word in parts[1:]:
 
-                        if t_word in self._data:
-                            # 一个词有多个编码的情况
-                            self._data[t_word].append(word_code)
-                        else:
-                            self._data[t_word] = [word_code]
-                else:
-                    break
-            except Exception as e:
-                log.warning("load cilin warn.[line:%d] %s" % (line_num, e))
+        #                if t_word in self._data:
+        #                    # 一个词有多个编码的情况
+        #                    self._data[t_word].append(word_code)
+        #                else:
+        #                    self._data[t_word] = [word_code]
+        #        else:
+        #            break
+        #    except Exception as e:
+        #        log.warning("load cilin warn.[line:%d] %s" % (line_num, e))
 
-        file_obj.close()
+        #file_obj.close()
 
         if not self._data:
             log.error("load cilin failed![%s]" % file_path)
